@@ -1,0 +1,16 @@
+#pragma once
+#define WIFI_SSID "SSID"
+#define WIFI_PASS "PASS"
+
+/* for direct connection to cloudmqtt 
+const char *mqtt_server = "xxx.cloudmqtt.com";
+const int mqtt_port = 11111;
+const char *mqtt_user = "user";
+const char *mqtt_pass = "pass";
+*/
+
+#define MQTT_SERVER "192.168.0.1"
+#define MQTT_PORT 1883
+#define MQTT_USER "user"
+#define MQTT_PASS "pass"
+#define MQTT_CLIENT_NAME "esp8266_1" // must be unique
