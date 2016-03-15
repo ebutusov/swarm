@@ -12,7 +12,7 @@ def on_connect(client, userdata, flags, rc):
 
 def doTemps(client, topic, payload):
     if topic.startswith("home/esp8266/sensor/"):
-        print("temperature received: " + payload)
+        #print("temperature received: " + payload)
         if topic.endswith("28efd1a6300c4"):
             temp = float(payload)
             if (temp > 26):
@@ -36,7 +36,7 @@ client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
 
-client.username_pw_set("XXX", "XXX")
+client.username_pw_set("test", "test")
 client.connect("localhost", 1883, 60)
 
 # Blocking call that processes network traffic, dispatches callbacks and
