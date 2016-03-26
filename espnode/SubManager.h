@@ -37,22 +37,22 @@ public:
   {
     m_client.set_callback(std::bind(&SubManager::callback, this, std::placeholders::_1));
   };
-  template <typename T>
-  void add(T&& sub)
+  
+  void add(const String& topic, const ONRECEIVED& cb)
   {
-    m_subs.insert(std::pair<String, Subscription>(sub.getTopic(), sub));
+    m_subs[topic] = std::unique_ptr<Subscription>(new Subscription(topic, cb));
   }
   void doSubscriptions() const
   {
     for (auto &kv : m_subs)
-      kv.second.subscribe(m_client);
+      kv.second->subscribe(m_client);
   }
 private:
   void callback(const MQTT::Publish &pub)
   {
     auto it = m_subs.find(pub.topic());
     if (it != m_subs.end())
-      it->second.do_callback(pub.topic(), pub.payload_string());
+      it->second->do_callback(pub.topic(), pub.payload_string());
   }
   PubSubClient& m_client;
   
@@ -60,5 +60,5 @@ private:
   // http://stackoverflow.com/questions/33450946/esp8266-for-arduino-ide-xtensa-lx106-elf-gcc-and-stdmap-linking-error
   // edit platforms.txt in $ARDUINO_IDE/hardware/esp8266com/esp8266, and add -lstdc++ to the following line:
   // compiler.c.elf.libs=-lm -lgcc -lhal -lphy -lnet80211 -llwip ...
-  std::map<String, Subscription> m_subs;
+  std::map<String, std::unique_ptr<Subscription>> m_subs;
 };

@@ -15,8 +15,7 @@ void MQTTNode::cyclicPub(const String &topic, int interval, PUBCB cb)
 
 void MQTTNode::onMsg(const String &topic, ONRECEIVED cb)
 {
-  Subscription sub(topic, cb);
-  m_submgr.add(sub);
+  m_submgr.add(topic, cb);
 }
 
 void MQTTNode::loop()
