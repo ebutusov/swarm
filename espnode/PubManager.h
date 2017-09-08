@@ -33,10 +33,10 @@ class PubManager
 {
 public:
   PubManager(PubSubClient& c): m_client(c) {};
-  template <typename T>
-  void add(T&& pub)
+  
+  void add(const String &topic, int interval, PUBCB cb)
   {
-    m_pubs.push_back(pub);
+    m_pubs.emplace_back(topic, interval, cb);
   }
 
   void doPublications()

@@ -9,8 +9,7 @@ void MQTTNode::authMQTT(const char *client_name, const char *user, const char *p
 
 void MQTTNode::cyclicPub(const String &topic, int interval, PUBCB cb)
 {
-  Publication pub(topic, interval, cb);
-  m_pubmgr.add(pub);
+  m_pubmgr.add(topic, interval, cb);
 }
 
 void MQTTNode::onMsg(const String &topic, ONRECEIVED cb)
