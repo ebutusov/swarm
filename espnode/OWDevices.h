@@ -52,7 +52,9 @@ public:
       Serial.print("Temperature: "); 
       Serial.print(t);
       Serial.println("C");
-      client.publish(topic+dev.strAddress,String(t));
+      String ltopic = topic+dev.strAddress;
+      String temperature = String(t);
+      client.publish(ltopic.c_str(),temperature.c_str());
     }
   }
 private:

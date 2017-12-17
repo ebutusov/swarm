@@ -26,7 +26,8 @@ void gpioPublish(int pin, PubSubClient &client, const String& topic)
   int p = digitalRead(pin) == HIGH ? 1 : 0;
   if (p != currentState)
   {
-    client.publish(topic,String(p));
+    String publish = String(p);
+    client.publish(topic.c_str(), publish.c_str());
     currentState = p;
   }
 }

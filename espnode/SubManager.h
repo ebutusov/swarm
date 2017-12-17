@@ -16,7 +16,7 @@ public:
   void subscribe(PubSubClient &client) const
   {
     //client.set_callback(m_callback);
-    client.subscribe(m_topic);
+    client.subscribe(m_topic.c_str());
   }
   String getTopic() { return m_topic; }
 
@@ -35,7 +35,7 @@ class SubManager
 public:
   SubManager(PubSubClient& c): m_client(c) 
   {
-    m_client.set_callback(std::bind(&SubManager::callback, this, std::placeholders::_1));
+    m_client.setCallback(std::bind(&SubManager::callback, this, std::placeholders::_1,std::placeholders::_2,std::placeholders::_3));
   };
   template <typename T>
   void add(T&& sub)
@@ -48,11 +48,15 @@ public:
       kv.second.subscribe(m_client);
   }
 private:
-  void callback(const MQTT::Publish &pub)
+  void callback(char *topic, byte *payload, unsigned int length)
   {
-    auto it = m_subs.find(pub.topic());
+    char buff[1024];
+    int l = length>1023 ? 1023 : length;
+    memcpy(buff, payload, l);
+    buff[l] = '\0';
+    auto it = m_subs.find(topic);
     if (it != m_subs.end())
-      it->second.do_callback(pub.topic(), pub.payload_string());
+      it->second.do_callback(topic, String((char*)buff));
   }
   PubSubClient& m_client;
   

@@ -38,8 +38,7 @@ void MQTTNode::loop()
     if (!m_pubsub.connected()) 
     {
       Serial.println("Connecting to MQTT server");
-      if (m_pubsub.connect(MQTT::Connect(m_mqtt_client)
-                         .set_auth(m_mqtt_user, m_mqtt_pass)))
+      if (m_pubsub.connect(m_mqtt_client.c_str(), m_mqtt_user.c_str(), m_mqtt_pass.c_str()))
       {
         Serial.println("Connected to MQTT server");
         m_submgr.doSubscriptions();
