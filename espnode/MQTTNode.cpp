@@ -9,12 +9,14 @@ void MQTTNode::authMQTT(const char *client_name, const char *user, const char *p
 
 void MQTTNode::cyclicPub(const String &topic, int interval, PUBCB cb)
 {
-  m_pubmgr.add(topic, interval, cb);
+  Publication pub(topic, interval, cb);
+  m_pubmgr.add(pub);
 }
 
 void MQTTNode::onMsg(const String &topic, ONRECEIVED cb)
 {
-  m_submgr.add(topic, cb);
+  Subscription sub(topic, cb);
+  m_submgr.add(sub);
 }
 
 void MQTTNode::loop()
@@ -36,8 +38,7 @@ void MQTTNode::loop()
     if (!m_pubsub.connected()) 
     {
       Serial.println("Connecting to MQTT server");
-      if (m_pubsub.connect(MQTT::Connect(m_mqtt_client)
-                         .set_auth(m_mqtt_user, m_mqtt_pass)))
+      if (m_pubsub.connect(m_mqtt_client.c_str(), m_mqtt_user.c_str(), m_mqtt_pass.c_str()))
       {
         Serial.println("Connected to MQTT server");
         m_submgr.doSubscriptions();

@@ -17,7 +17,7 @@ protected:
 public:
   MQTTNode(const char *wifi_ssid, const char *wifi_pass, const char *mqtt_server, int mqtt_port): 
   m_wclient(), 
-  m_pubsub(m_wclient, mqtt_server, mqtt_port),
+  m_pubsub(mqtt_server, mqtt_port, m_wclient),
   m_submgr(m_pubsub),
   m_pubmgr(m_pubsub),
   m_wifi_ssid(wifi_ssid),
